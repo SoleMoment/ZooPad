@@ -9,4 +9,7 @@ export default defineConfig({
             '@': path.resolve(__dirname, './src'),
         },
     },
+    build: {
+        outDir: 'docs',  // 将 'build' 替换为您想要的文件夹名称
+    },
 });
