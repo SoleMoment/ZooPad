@@ -1,15 +1,23 @@
 import { defineConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';
-import path from 'path';
-// https://vitejs.dev/config/
+import { resolve } from 'path';
+// https://vite.dev/config/
 export default defineConfig({
+    base: './',
     plugins: [vue()],
     resolve: {
         alias: {
-            '@': path.resolve(__dirname, './src'),
-        },
+            '@': resolve(__dirname, 'src')
+        }
+    },
+    server: {
+        port: 5173,
+        host: true,
+        open: true
     },
     build: {
-        outDir: 'docs',  // 将 'build' 替换为您想要的文件夹名称
-    },
+        target: 'esnext',
+        sourcemap: false,
+        outDir: 'docs',
+    }
 });

@@ -26,6 +26,9 @@ import {
 const taskStore = useTaskStore()
 const photosStore = usePhotosStore()
 
+// 基础URL（用于public目录资源）
+const baseUrl = import.meta.env.BASE_URL
+
 // 页面状态
 type PageType = 'home' | 'zoo' | 'search' | 'animal'
 const currentPage = ref<PageType>('home')
@@ -325,7 +328,7 @@ onMounted(() => {
         <!-- Hero Banner -->
         <div class="relative h-48 bg-gradient-to-r from-green-600 to-emerald-500 overflow-hidden">
           <img 
-            src="https://images.unsplash.com/photo-1534567153574-2b12153a87f0?w=1200"
+            :src="baseUrl + 'images/attractions/zoo_entrance.png'"
             class="absolute inset-0 w-full h-full object-cover opacity-40"
           />
           <div class="absolute inset-0 flex flex-col items-center justify-center text-white">
@@ -398,19 +401,19 @@ onMounted(() => {
               v-for="animal in filteredAnimals"
               :key="animal.id"
               @click="viewAnimal(animal)"
-              @contextmenu="handleContextMenu($event, 'image', { url: animal.images[0], name: animal.name })"
+              @contextmenu="handleContextMenu($event, 'image', { url: baseUrl + animal.images[0], name: animal.name })"
               class="bg-white rounded-2xl shadow-sm overflow-hidden cursor-pointer hover:shadow-lg transition-shadow group"
             >
               <div class="relative h-32 overflow-hidden">
                 <!-- 模糊背景层 -->
                 <img
-                  :src="animal.images[0]"
+                  :src="baseUrl + animal.images[0]"
                   :alt="animal.name"
                   class="absolute inset-0 w-full h-full object-cover blur-xl scale-110 opacity-60"
                 />
                 <!-- 主图片 -->
                 <img
-                  :src="animal.images[0]"
+                  :src="baseUrl + animal.images[0]"
                   :alt="animal.name"
                   class="relative w-full h-full object-contain group-hover:scale-110 transition-transform duration-300"
                 />
@@ -439,16 +442,16 @@ onMounted(() => {
         <!-- 头图 -->
         <div
           class="relative h-56 overflow-hidden"
-          @contextmenu="handleContextMenu($event, 'image', { url: selectedAnimal.images[0], name: selectedAnimal.name })"
+          @contextmenu="handleContextMenu($event, 'image', { url: baseUrl + selectedAnimal.images[0], name: selectedAnimal.name })"
         >
           <!-- 模糊背景层 -->
           <img
-            :src="selectedAnimal.images[0]"
+            :src="baseUrl + selectedAnimal.images[0]"
             class="absolute inset-0 w-full h-full object-cover blur-xl scale-110 opacity-70"
           />
           <!-- 主图片 -->
           <img
-            :src="selectedAnimal.images[0]"
+            :src="baseUrl + selectedAnimal.images[0]"
             class="relative w-full h-full object-contain"
           />
           <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent pointer-events-none"></div>

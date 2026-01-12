@@ -44,12 +44,10 @@ export const useSystemStore = defineStore('system', () => {
   const wallpapers = [
     // 本地桌面壁纸
     desktopWallpaper,
-    // 卡通森林动物乐园 - 小熊、小鹿、小兔子在树林里玩耍
-    'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?q=80&w=2070&auto=format&fit=crop',
-    // 彩虹独角兽梦幻世界 - 色彩缤纷的童话场景
-    'https://images.unsplash.com/photo-1576086213369-97a306d36557?q=80&w=2070&auto=format&fit=crop',
-    // 可爱海底世界 - 五彩斑斓的珊瑚和热带鱼
-    'https://images.unsplash.com/photo-1559827260-dc66d52bef19?q=80&w=2070&auto=format&fit=crop'
+    // 本地壁纸 - 离线可用
+    import.meta.env.BASE_URL + 'images/wallpapers/sunset.png',
+    import.meta.env.BASE_URL + 'images/wallpapers/ocean.png',
+    import.meta.env.BASE_URL + 'images/wallpapers/forest.png'
   ]
 
   const currentWallpaper = computed(() => wallpapers[wallpaperIndex.value])

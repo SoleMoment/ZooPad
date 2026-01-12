@@ -4,6 +4,7 @@ import { resolve } from 'path'
 
 // https://vite.dev/config/
 export default defineConfig({
+  base: './',
   plugins: [vue()],
   resolve: {
     alias: {
@@ -17,7 +18,6 @@ export default defineConfig({
   },
   build: {
     target: 'esnext',
-    minify: 'terser',
     sourcemap: false
   }
 })

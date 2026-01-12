@@ -22,6 +22,9 @@ const taskStore = useTaskStore()
 const systemStore = useSystemStore()
 const photosStore = usePhotosStore()
 
+// 基础URL（用于public目录资源）
+const baseUrl = import.meta.env.BASE_URL
+
 // 页面状态
 const pageState = ref<'home' | 'search' | 'detail' | 'checkout' | 'success'>('home')
 const searchQuery = ref('')
@@ -34,9 +37,9 @@ const toastMessage = ref('')
 
 // 热门景点
 const hotSpots = [
-  { id: 1, name: '新浦动物园', rating: 4.8, reviews: 2856, price: 120, image: 'https://images.unsplash.com/photo-1534567153574-2b12153a87f0?w=400' },
-  { id: 2, name: '花果山风景区', rating: 4.9, reviews: 5621, price: 90, image: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400' },
-  { id: 3, name: '连岛海滨度假区', rating: 4.7, reviews: 1823, price: 65, image: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=400' },
+  { id: 1, name: '新浦动物园', rating: 4.8, reviews: 2856, price: 120, image: 'images/attractions/zoo_entrance.png' },
+  { id: 2, name: '花果山风景区', rating: 4.9, reviews: 5621, price: 90, image: 'images/attractions/huaguo_mountain.png' },
+  { id: 3, name: '连岛海滨度假区', rating: 4.7, reviews: 1823, price: 65, image: 'images/attractions/liandao_beach.png' },
 ]
 
 // 订单信息
@@ -209,7 +212,7 @@ onMounted(() => {
               class="flex gap-4 p-3 bg-gray-50 rounded-2xl cursor-pointer hover:bg-gray-100 transition-colors"
               :class="{ 'ring-2 ring-green-500 bg-green-50': spot.name.includes('动物') }"
             >
-              <img :src="spot.image" class="w-24 h-24 rounded-xl object-cover" />
+              <img :src="baseUrl + spot.image" class="w-24 h-24 rounded-xl object-cover" />
               <div class="flex-1">
                 <h4 class="font-bold text-gray-800 mb-1">{{ spot.name }}</h4>
                 <div class="flex items-center gap-2 text-xs text-gray-500 mb-2">
@@ -242,7 +245,7 @@ onMounted(() => {
             class="bg-white p-4 rounded-2xl shadow-sm cursor-pointer hover:shadow-md transition-shadow"
           >
             <div class="flex gap-4">
-              <img src="https://images.unsplash.com/photo-1534567153574-2b12153a87f0?w=400" class="w-28 h-28 rounded-xl object-cover" />
+              <img :src="baseUrl + 'images/attractions/zoo_entrance.png'" class="w-28 h-28 rounded-xl object-cover" />
               <div class="flex-1">
                 <div class="flex items-start justify-between">
                   <h4 class="font-bold text-gray-800">新浦动物园</h4>
@@ -277,7 +280,7 @@ onMounted(() => {
       <template v-else-if="pageState === 'detail'">
         <!-- 头图 -->
         <div class="relative h-48">
-          <img src="https://images.unsplash.com/photo-1534567153574-2b12153a87f0?w=800" class="w-full h-full object-cover" />
+          <img :src="baseUrl + 'images/attractions/zoo_entrance.png'" class="w-full h-full object-cover" />
           <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
           <div class="absolute bottom-4 left-4 text-white">
             <h1 class="text-xl font-bold">新浦动物园</h1>

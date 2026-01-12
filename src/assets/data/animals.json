@@ -17,7 +17,7 @@
                 "长颈鹿奔跑时速可达56公里"
             ],
             "images": [
-                "/src/assets/images/长颈鹿.png"
+                "images/长颈鹿.png"
             ],
             "stats": {
                 "height": "4.5-5.8米",
@@ -43,7 +43,7 @@
                 "大象会为死去的同伴举行'葬礼'"
             ],
             "images": [
-                "/src/assets/images/亚洲象.jpg"
+                "images/亚洲象.jpg"
             ],
             "stats": {
                 "height": "2.5-3米",
@@ -68,7 +68,7 @@
                 "火烈鸟可以喝沸腾的盐碱水而不会受伤"
             ],
             "images": [
-                "/src/assets/images/火烈鸟.png"
+                "images/火烈鸟.png"
             ],
             "stats": {
                 "height": "1.1-1.5米",
@@ -93,7 +93,7 @@
                 "金丝猴家族由一只雄性和多只雌性组成"
             ],
             "images": [
-                "/src/assets/images/金丝猴.png"
+                "images/金丝猴.png"
             ],
             "stats": {
                 "height": "57-76厘米（不含尾巴）",
@@ -118,7 +118,7 @@
                 "东北虎可以一次吃掉40公斤的肉"
             ],
             "images": [
-                "/src/assets/images/东北虎.png"
+                "images/东北虎.png"
             ],
             "stats": {
                 "height": "1-1.2米（肩高）",
@@ -144,7 +144,7 @@
                 "海狮非常聪明，可以学会各种表演技巧"
             ],
             "images": [
-                "/src/assets/images/海狮.png"
+                "images/海狮.png"
             ],
             "stats": {
                 "height": "1.8-2.4米",
@@ -169,7 +169,7 @@
                 "新生熊猫只有约100克重，相当于它们妈妈体重的1/900"
             ],
             "images": [
-                "/src/assets/images/大熊猫.jpg"
+                "images/大熊猫.jpg"
             ],
             "stats": {
                 "height": "1.2-1.9米",
@@ -194,7 +194,7 @@
                 "孔雀可以发出11种不同的叫声"
             ],
             "images": [
-                "/src/assets/images/孔雀.png"
+                "images/孔雀.png"
             ],
             "stats": {
                 "height": "1-1.3米",

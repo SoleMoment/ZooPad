@@ -1,0 +1,12 @@
+/* 本地字体配置 - 系统字体栈 */
+/* 当无法加载 Google Fonts 时，使用系统自带的无衬线字体 */
+
+:root {
+  --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 
+               'Microsoft YaHei', 'Helvetica Neue', Helvetica, Arial, sans-serif,
+               'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+}
+
+body {
+  font-family: var(--font-sans);
+}

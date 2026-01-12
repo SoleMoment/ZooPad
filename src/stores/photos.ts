@@ -12,21 +12,21 @@ export const usePhotosStore = defineStore('photos', () => {
         {
             id: 'preset_1',
             name: '长颈鹿',
-            url: '/src/assets/images/长颈鹿.png',
+            url: import.meta.env.BASE_URL + 'images/长颈鹿.png',
             category: 'animal',
             savedAt: new Date('2024-01-01')
         },
         {
             id: 'preset_2',
             name: '火烈鸟',
-            url: '/src/assets/images/火烈鸟.png',
+            url: import.meta.env.BASE_URL + 'images/火烈鸟.png',
             category: 'animal',
             savedAt: new Date('2024-01-01')
         },
         {
             id: 'preset_3',
             name: '大熊猫',
-            url: '/src/assets/images/大熊猫.jpg',
+            url: import.meta.env.BASE_URL + 'images/大熊猫.jpg',
             category: 'animal',
             savedAt: new Date('2024-01-01')
         }
