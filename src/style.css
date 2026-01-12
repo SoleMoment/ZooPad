@@ -1,0 +1,392 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ==========================================
+   ZooPad 全局样式系统
+   ========================================== */
+
+/* ===== iOS 系统字体 ===== */
+
+
+:root {
+  /* iOS 系统颜色变量 */
+  --ios-blue: #007AFF;
+  --ios-green: #34C759;
+  --ios-red: #FF3B30;
+  --ios-orange: #FF9500;
+  --ios-yellow: #FFCC00;
+  --ios-purple: #AF52DE;
+  --ios-pink: #FF2D55;
+  --ios-teal: #5AC8FA;
+
+  /* 中性色 */
+  --ios-gray-1: #8E8E93;
+  --ios-gray-2: #AEAEB2;
+  --ios-gray-3: #C7C7CC;
+  --ios-gray-4: #D1D1D6;
+  --ios-gray-5: #E5E5EA;
+  --ios-gray-6: #F2F2F7;
+
+  /* 背景色 */
+  --ios-bg-primary: #FFFFFF;
+  --ios-bg-secondary: #F2F2F7;
+  --ios-bg-tertiary: #FFFFFF;
+
+  /* 玻璃效果 */
+  --glass-bg: rgba(255, 255, 255, 0.72);
+  --glass-border: rgba(255, 255, 255, 0.2);
+  --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+}
+
+/* 深色模式变量 */
+.dark {
+  --ios-bg-primary: #000000;
+  --ios-bg-secondary: #1C1C1E;
+  --ios-bg-tertiary: #2C2C2E;
+  --glass-bg: rgba(28, 28, 30, 0.72);
+  --glass-border: rgba(255, 255, 255, 0.1);
+}
+
+/* ===== 基础样式重置 ===== */
+* {
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+}
+
+html,
+body {
+  @apply overflow-hidden m-0 p-0;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background: #121212;
+}
+
+/* 禁止文本选择（模拟真实iPad） */
+body {
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* 可选择的内容区域 */
+.selectable {
+  user-select: text;
+  -webkit-user-select: text;
+}
+
+/* ===== iOS 玻璃拟态组件 ===== */
+@layer components {
+
+  /* 标准 iOS 毛玻璃效果 */
+  .ios-glass {
+    @apply backdrop-blur-2xl border shadow-lg;
+    background: var(--glass-bg);
+    border-color: var(--glass-border);
+    box-shadow: var(--glass-shadow);
+  }
+
+  /* 深色毛玻璃 */
+  .ios-glass-dark {
+    @apply backdrop-blur-2xl border shadow-lg;
+    background: rgba(0, 0, 0, 0.6);
+    border-color: rgba(255, 255, 255, 0.1);
+  }
+
+  /* iOS 按钮基础样式 */
+  .ios-button {
+    @apply px-4 py-2 rounded-xl font-medium transition-all duration-150;
+    @apply active:scale-95 active:opacity-80;
+  }
+
+  .ios-button-primary {
+    @apply ios-button bg-[--ios-blue] text-white;
+    @apply hover:bg-blue-600;
+  }
+
+  .ios-button-secondary {
+    @apply ios-button bg-gray-100 text-gray-800;
+    @apply hover:bg-gray-200;
+  }
+
+  /* iOS 卡片样式 */
+  .ios-card {
+    @apply bg-white rounded-2xl shadow-sm border border-gray-100;
+    @apply transition-all duration-200;
+  }
+
+  .ios-card-interactive {
+    @apply ios-card cursor-pointer;
+    @apply hover:shadow-md hover:-translate-y-0.5;
+    @apply active:scale-[0.98] active:shadow-sm;
+  }
+
+  /* iOS 输入框 */
+  .ios-input {
+    @apply w-full px-4 py-3 rounded-xl bg-gray-100 border-0;
+    @apply outline-none transition-all duration-200;
+    @apply focus:ring-2 focus:ring-[--ios-blue] focus:bg-white;
+    @apply placeholder:text-gray-400;
+  }
+
+  /* iOS 列表项 */
+  .ios-list-item {
+    @apply flex items-center px-4 py-3 bg-white;
+    @apply transition-colors duration-150;
+    @apply active:bg-gray-100;
+  }
+
+  .ios-list-item+.ios-list-item {
+    @apply border-t border-gray-100;
+  }
+
+  /* App 图标样式 */
+  .app-icon {
+    @apply rounded-[22%] shadow-lg overflow-hidden;
+    @apply transition-all duration-200;
+    @apply active:scale-95;
+  }
+
+  .app-icon-large {
+    @apply w-20 h-20 app-icon;
+  }
+
+  .app-icon-medium {
+    @apply w-14 h-14 app-icon;
+  }
+
+  /* 状态栏样式 */
+  .status-bar {
+    @apply h-8 px-6 flex items-center justify-between;
+    @apply text-white text-xs font-medium tracking-wide;
+  }
+
+  /* Dock 栏样式 */
+  .dock-bar {
+    @apply px-4 py-2 rounded-3xl ios-glass;
+    @apply flex items-center gap-3;
+  }
+
+  /* 窗口标题栏 */
+  .window-header {
+    @apply h-12 flex items-center justify-between px-4;
+    @apply bg-gray-50 border-b border-gray-200;
+    @apply shrink-0;
+  }
+
+  /* 悟空对话气泡 */
+  .wukong-bubble {
+    @apply bg-white/95 backdrop-blur-xl rounded-2xl p-4;
+    @apply shadow-2xl border-2 border-yellow-400;
+    @apply animate-bounce-in;
+  }
+}
+
+/* ===== 动画效果 ===== */
+@layer utilities {
+
+  /* 弹入动画 */
+  .animate-bounce-in {
+    animation: bounceIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  /* 淡入上滑 */
+  .animate-slide-up {
+    animation: slideUp 0.3s ease-out;
+  }
+
+  /* 缩放进入 */
+  .animate-scale-in {
+    animation: scaleIn 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  /* 脉冲光晕 */
+  .animate-glow-pulse {
+    animation: glowPulse 2s ease-in-out infinite;
+  }
+
+  /* 扫描线效果 */
+  .animate-scan-line {
+    animation: scanLine 2s linear infinite;
+  }
+}
+
+@keyframes bounceIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.8) translateY(20px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes slideUp {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scaleIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes glowPulse {
+
+  0%,
+  100% {
+    box-shadow: 0 0 20px rgba(255, 200, 50, 0.3);
+  }
+
+  50% {
+    box-shadow: 0 0 40px rgba(255, 200, 50, 0.6);
+  }
+}
+
+@keyframes scanLine {
+  0% {
+    top: 0%;
+  }
+
+  100% {
+    top: 100%;
+  }
+}
+
+/* App 打开动画 */
+.app-open-enter-active {
+  animation: appOpen 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.app-open-leave-active {
+  animation: appOpen 0.25s cubic-bezier(0.34, 1.56, 0.64, 1) reverse;
+}
+
+@keyframes appOpen {
+  0% {
+    opacity: 0;
+    transform: scale(0.8);
+    border-radius: 40px;
+  }
+
+  100% {
+    opacity: 1;
+    transform: scale(1);
+    border-radius: 0;
+  }
+}
+
+/* ===== 滚动条样式 ===== */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.3);
+}
+
+/* 隐藏滚动条但保留滚动功能 */
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* ===== 特殊效果 ===== */
+/* 霓虹光效 */
+.neon-glow {
+  text-shadow:
+    0 0 5px currentColor,
+    0 0 10px currentColor,
+    0 0 20px currentColor;
+}
+
+/* 渐变文字 */
+.gradient-text {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* 闪烁光标 */
+.cursor-blink::after {
+  content: '|';
+  animation: blink 1s infinite;
+}
+
+@keyframes blink {
+
+  0%,
+  50% {
+    opacity: 1;
+  }
+
+  51%,
+  100% {
+    opacity: 0;
+  }
+}
+
+/* ===== 响应式调整 ===== */
+@media (max-width: 768px) {
+  .app-icon-large {
+    @apply w-16 h-16;
+  }
+}
+
+/* 强制横屏提示 */
+@media (orientation: portrait) and (max-width: 1024px) {
+  .landscape-only::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: #000;
+    z-index: 99999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .landscape-only::after {
+    content: '📱 请旋转设备至横屏模式';
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    font-size: 1.5rem;
+    z-index: 100000;
+    text-align: center;
+    padding: 2rem;
+  }
+}
