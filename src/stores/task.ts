@@ -14,10 +14,21 @@ export const useTaskStore = defineStore('task', () => {
   // 默认 -> 所有任务
   const getLessonFromUrl = (): number | null => {
     if (typeof window === 'undefined') return null
+
+    // 优先检查查询参数 ?lesson=1
+    const urlParams = new URLSearchParams(window.location.search)
+    const lessonParam = urlParams.get('lesson')
+    if (lessonParam) {
+      const lessonNum = parseInt(lessonParam, 10)
+      if (lessonNum >= 1 && lessonNum <= 3) return lessonNum
+    }
+
+    // 兼容旧的路径方式 /lesson1（开发环境）
     const path = window.location.pathname
     if (path.includes('/lesson1')) return 1
     if (path.includes('/lesson2')) return 2
     if (path.includes('/lesson3')) return 3
+
     return null
   }
 
