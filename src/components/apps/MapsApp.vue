@@ -245,7 +245,7 @@ function performSearch(keyword: string) {
       isSearching.value = false
 
       if (search.getStatus() === (window as any).BMAP_STATUS_SUCCESS && results) {
-        const pois = []
+        const pois: { uid: string; name: string; address: string; point: any; phone: string; type: string; distance: string }[] = []
         const numPois = results.getCurrentNumPois()
 
         for (let i = 0; i < numPois; i++) {
@@ -578,7 +578,7 @@ function planDrivingRoute() {
 
       // 解析结果
       const numPlans = results.getNumPlans ? results.getNumPlans() : 1
-      const routes = []
+      const routes: { id: number; name: string; duration: any; distance: any; traffic: string; highlight: boolean; steps: { instruction: string; distance: string }[] }[] = []
 
       for (let i = 0; i < Math.min(numPlans, 3); i++) {
         const plan = results.getPlan(i)
@@ -712,7 +712,7 @@ function planTransitRoute() {
       }
 
       const numPlans = results.getNumPlans()
-      const routes = []
+      const routes: { id: number; name: string; duration: any; distance: any; traffic: string; highlight: boolean; steps: { instruction: string; distance: string }[] }[] = []
 
       for (let i = 0; i < Math.min(numPlans, 5); i++) {
         const plan = results.getPlan(i)
@@ -720,7 +720,7 @@ function planTransitRoute() {
           // 获取公交线路信息
           let lineInfo = ''
           const numLines = plan.getNumLines()
-          const lines = []
+          const lines: string[] = []
 
           for (let j = 0; j < numLines; j++) {
             const line = plan.getLine(j)

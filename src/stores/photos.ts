@@ -3,7 +3,7 @@
 // ==========================================
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
-import type { Photo } from '@/types'
+import type { Photo, PhotoAnnotation } from '@/types'
 
 export const usePhotosStore = defineStore('photos', () => {
     // ========== 相册图片列表 ==========
@@ -94,7 +94,7 @@ export const usePhotosStore = defineStore('photos', () => {
         isEditing.value = false
     }
 
-    function addAnnotation(photoId: string, annotation: Photo['annotations'][0]) {
+    function addAnnotation(photoId: string, annotation: PhotoAnnotation) {
         const photo = photos.value.find(p => p.id === photoId)
         if (photo) {
             if (!photo.annotations) {
