@@ -1,6 +1,6 @@
 <script setup lang="ts">
 // ==========================================
-// 天气 App - 连云港实时天气 (使用 wttr.in API)
+// 天气 App - 连云港实时天气 (使用 Open-Meteo API)
 // ==========================================
 import { ref, onMounted } from 'vue'
 import { useTaskStore } from '@/stores/task'
@@ -96,39 +96,51 @@ const travelSuggestion = computed(() => {
   return { emoji, suggestion, tips }
 })
 
-// 天气代码到图标的映射
-function weatherCodeToIcon(code: string): string {
-  const codeNum = parseInt(code)
-  if (codeNum === 113) return 'sun' // 晴
-  if (codeNum === 116 || codeNum === 119) return 'cloud' // 多云/阴
-  if (codeNum === 122) return 'fog' // 雾
-  if ([176, 263, 266, 293, 296, 299, 302, 305, 308, 311, 314, 317, 320, 353, 356, 359].includes(codeNum)) return 'rain' // 雨
-  if ([179, 182, 185, 227, 230, 323, 326, 329, 332, 335, 338, 350, 362, 365, 368, 371, 374, 377, 392, 395].includes(codeNum)) return 'snow' // 雪
+// 连云港市坐标 (Open-Meteo 使用经纬度)
+const LIANYUNGANG_LAT = 34.60
+const LIANYUNGANG_LON = 119.22
+
+// WMO 天气代码到图标的映射
+function wmoCodeToIcon(code: number): string {
+  if (code <= 1) return 'sun'
+  if (code <= 3) return 'cloud'
+  if (code === 45 || code === 48) return 'fog'
+  if ((code >= 51 && code <= 67) || (code >= 80 && code <= 82)) return 'rain'
+  if ((code >= 71 && code <= 77) || code === 85 || code === 86) return 'snow'
+  if (code >= 95) return 'rain'
   return 'cloud'
 }
 
-// 天气代码到中文描述
-function weatherCodeToText(code: string): string {
-  const codeNum = parseInt(code)
+// WMO 天气代码到中文描述
+function wmoCodeToText(code: number): string {
   const textMap: Record<number, string> = {
-    113: '晴', 116: '多云', 119: '阴', 122: '雾',
-    176: '小雨', 263: '毛毛雨', 266: '小雨', 293: '小雨', 296: '小雨',
-    299: '中雨', 302: '中雨', 305: '大雨', 308: '暴雨',
-    179: '小雪', 227: '小雪', 230: '暴雪', 323: '小雪', 326: '小雪',
-    329: '中雪', 332: '中雪', 335: '大雪', 338: '大雪'
+    0: '晴', 1: '晴', 2: '多云', 3: '阴',
+    45: '雾', 48: '雾凇',
+    51: '小雨', 53: '小雨', 55: '小雨',
+    61: '小雨', 63: '中雨', 65: '大雨',
+    71: '小雪', 73: '中雪', 75: '大雪',
+    80: '阵雨', 81: '阵雨', 82: '暴雨',
+    85: '小雪', 86: '大雪',
+    95: '雷阵雨', 96: '雷阵雨', 99: '雷暴'
   }
-  return textMap[codeNum] || '多云'
+  return textMap[code] || '多云'
 }
 
-// 风向转中文
-function windDirToChinese(dir: string): string {
-  const dirMap: Record<string, string> = {
-    'N': '北风', 'NNE': '东北偏北', 'NE': '东北风', 'ENE': '东北偏东',
-    'E': '东风', 'ESE': '东南偏东', 'SE': '东南风', 'SSE': '东南偏南',
-    'S': '南风', 'SSW': '西南偏南', 'SW': '西南风', 'WSW': '西南偏西',
-    'W': '西风', 'WNW': '西北偏西', 'NW': '西北风', 'NNW': '西北偏北'
-  }
-  return dirMap[dir] || dir
+// 风向角度转中文
+function windDegreeToDir(degree: number): string {
+  const dirs = ['北风', '东北风', '东风', '东南风', '南风', '西南风', '西风', '西北风']
+  return dirs[Math.round(degree / 45) % 8]
+}
+
+// 风速转风力等级
+function windSpeedToScale(speed: number): string {
+  if (speed < 1) return '0级'
+  if (speed < 6) return '1级'
+  if (speed < 12) return '2级'
+  if (speed < 20) return '3级'
+  if (speed < 29) return '4级'
+  if (speed < 39) return '5级'
+  return '6级以上'
 }
 
 // 星期几
@@ -159,64 +171,63 @@ async function fetchWeather() {
   loadError.value = ''
   
   try {
-    // 使用 wttr.in API 获取连云港天气
-    const response = await fetch('https://wttr.in/Lianyungang?format=j1&lang=zh')
+    // 使用 Open-Meteo API (免费，无需 API Key，支持 CORS)
+    const response = await fetch(
+      `https://api.open-meteo.com/v1/forecast?latitude=${LIANYUNGANG_LAT}&longitude=${LIANYUNGANG_LON}` +
+      `&current=temperature_2m,relative_humidity_2m,apparent_temperature,weather_code,surface_pressure,wind_speed_10m,wind_direction_10m` +
+      `&hourly=temperature_2m,weather_code` +
+      `&daily=weather_code,temperature_2m_max,temperature_2m_min,uv_index_max` +
+      `&timezone=Asia/Shanghai&forecast_days=7`
+    )
     
     if (!response.ok) {
       throw new Error('天气服务暂时不可用')
     }
     
     const data = await response.json()
-    
-    // 解析当前天气
-    const current = data.current_condition[0]
-    const today = data.weather[0]
+    const current = data.current
+    const hourly = data.hourly
+    const daily = data.daily
     
     weatherData.value = {
       location: '连云港市 · 海州区',
-      temperature: parseInt(current.temp_C),
-      feelsLike: parseInt(current.FeelsLikeC),
-      text: weatherCodeToText(current.weatherCode),
-      icon: weatherCodeToIcon(current.weatherCode),
-      humidity: parseInt(current.humidity),
-      windDir: windDirToChinese(current.winddir16Point),
-      windScale: current.windspeedKmph + ' km/h',
-      uvIndex: parseInt(current.uvIndex) <= 2 ? '低' : parseInt(current.uvIndex) <= 5 ? '中等' : '高',
-      pressure: current.pressure + ' hPa',
-      visibility: current.visibility + ' km'
+      temperature: Math.round(current.temperature_2m),
+      feelsLike: Math.round(current.apparent_temperature),
+      text: wmoCodeToText(current.weather_code),
+      icon: wmoCodeToIcon(current.weather_code),
+      humidity: Math.round(current.relative_humidity_2m),
+      windDir: windDegreeToDir(current.wind_direction_10m),
+      windScale: windSpeedToScale(current.wind_speed_10m),
+      uvIndex: (daily.uv_index_max?.[0] || 3) <= 2 ? '低' : (daily.uv_index_max?.[0] || 3) <= 5 ? '中等' : '高',
+      pressure: Math.round(current.surface_pressure) + ' hPa',
+      visibility: '10 km'
     }
     
-    // 解析24小时预报
-    const now = new Date()
-    const currentHour = now.getHours()
+    // 解析24小时预报 - 从当前小时开始取8个
+    const currentHour = new Date().getHours()
     const hourlyData: Array<{ time: string; temp: number; icon: string }> = []
     
-    // 从今天和明天的小时数据中取接下来8个小时
-    const allHours = [...today.hourly, ...(data.weather[1]?.hourly || [])]
-    let count = 0
-    
-    for (const hour of allHours) {
-      const hourNum = parseInt(hour.time) / 100
-      if (data.weather.indexOf(today) === 0 && hourNum < currentHour) continue
-      if (count >= 8) break
-      
-      hourlyData.push({
-        time: count === 0 ? '现在' : `${hourNum.toString().padStart(2, '0')}:00`,
-        temp: parseInt(hour.tempC),
-        icon: weatherCodeToIcon(hour.weatherCode)
-      })
-      count++
+    for (let i = 0; i < 8; i++) {
+      const hourIndex = currentHour + i
+      if (hourIndex < hourly.time.length) {
+        const time = hourly.time[hourIndex]
+        hourlyData.push({
+          time: i === 0 ? '现在' : time.slice(11, 16),
+          temp: Math.round(hourly.temperature_2m[hourIndex]),
+          icon: wmoCodeToIcon(hourly.weather_code[hourIndex])
+        })
+      }
     }
     
     hourlyForecast.value = hourlyData
     
-    // 解析7日预报（wttr.in 只提供3天）
-    dailyForecast.value = data.weather.map((day: any, index: number) => ({
+    // 解析3日预报（与 wttr.in 保持一致）
+    dailyForecast.value = daily.time.slice(0, 3).map((date: string, index: number) => ({
       day: getDayName(index),
-      high: parseInt(day.maxtempC),
-      low: parseInt(day.mintempC),
-      icon: weatherCodeToIcon(day.hourly[4]?.weatherCode || '116'),
-      text: weatherCodeToText(day.hourly[4]?.weatherCode || '116')
+      high: Math.round(daily.temperature_2m_max[index]),
+      low: Math.round(daily.temperature_2m_min[index]),
+      icon: wmoCodeToIcon(daily.weather_code[index]),
+      text: wmoCodeToText(daily.weather_code[index])
     }))
     
     isLoading.value = false
