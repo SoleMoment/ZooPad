@@ -58,7 +58,7 @@ export const useTaskStore = defineStore('task', () => {
       description: '打开【天气App】，查看连云港海州区明天的天气，告诉悟空去动物园冷不冷。',
       status: 'in_progress', // 阶段一第一个任务默认激活
       requiredAppId: 'weather',
-      guideText: '明天我们要去动物园游玩，你能帮我查查天气吗？要不要带雨具！',
+      guideText: '明天我们要去动物园游玩，你能帮我查查天气吗？要不要带雨具呢？☀️🌧️',
       completeText: '太好了！有你在真好，现在我知道该怎么穿衣服啦！👍',
       steps: [
         { id: 'step_1_1', description: '打开天气App', completed: false, trigger: { type: 'app_open', appId: 'weather' } },
