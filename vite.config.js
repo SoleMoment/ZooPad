@@ -18,6 +18,6 @@ export default defineConfig({
     build: {
         target: 'esnext',
         sourcemap: false,
-        outDir: 'docs',
+        outDir: 'dist',
     }
 });
